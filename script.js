@@ -40,7 +40,7 @@ async function processPDF(file) {
     }
 
     const result = extractData(combinedText);
-    displayResult(result);
+    displayResult(result, combinedText);
   };
   reader.readAsArrayBuffer(file);
 }
@@ -49,7 +49,7 @@ function processImage(imageData) {
   Tesseract.recognize(imageData, 'eng')
     .then(({ data: { text } }) => {
       const result = extractData(text);
-      displayResult(result);
+      displayResult(result, text);
     })
     .catch(err => {
       document.getElementById("results").innerHTML = "<p>Error during OCR.</p>";
@@ -73,7 +73,7 @@ function extractData(text) {
   };
 }
 
-function displayResult(data) {
+function displayResult(data, rawText = "") {
   let html = "<h2>Extracted Info</h2>";
   for (const [key, value] of Object.entries(data)) {
     html += `<div class="field"><strong>${key.replaceAll("_", " ")}:</strong> ${value}</div>`;

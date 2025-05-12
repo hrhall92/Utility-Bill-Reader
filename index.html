@@ -19,5 +19,34 @@
   <canvas id="pdf-canvas"></canvas>
 
   <script src="script.js"></script>
+
+  <h2>GPT Prompt for Extracting Bill Info</h2>
+  <pre id="gpt-prompt" style="white-space: pre-wrap; background: #f0f0f0; padding: 1em; border-radius: 6px;"></pre>
+
+  <script>
+    function generateGptPrompt(rawText) {
+      return `You are a utility billing assistant. Extract the following fields from this residential utility bill text. Return only the structured output in JSON format. If a field is not present, write "N/A".
+
+Fields:
+- Utility
+- Tariff
+- Avg_kwh_rate (in $ per kWh)
+- Avg_fixed_mo_costs (monthly fixed cost, in $)
+- Avg_monthly_bill (in $)
+- Annual_consumption_kwh (total annual electricity usage in kWh)
+
+Utility Bill Text:
+"""
+${rawText.trim()}
+"""`;
+    }
+
+    const originalDisplayResult = displayResult;
+    displayResult = function(data, rawText = "") {
+      originalDisplayResult(data);
+      const gptPrompt = generateGptPrompt(rawText);
+      document.getElementById("gpt-prompt").textContent = gptPrompt;
+    };
+  </script>
 </body>
 </html>
