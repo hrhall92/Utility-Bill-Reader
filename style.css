@@ -3,11 +3,9 @@ body {
   margin: 2em;
   background: #f8f8f8;
 }
-
-h1 {
+h1, h2 {
   color: #333;
 }
-
 #results {
   margin-top: 1em;
   background: white;
@@ -15,11 +13,12 @@ h1 {
   border-radius: 8px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
-
-.field {
-  margin: 0.3em 0;
+.output-block {
+  background: #f4f4f4;
+  padding: 1em;
+  border-radius: 6px;
+  white-space: pre-wrap;
 }
-
 canvas {
   display: none;
 }
