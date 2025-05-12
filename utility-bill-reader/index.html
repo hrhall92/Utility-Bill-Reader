@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Utility Bill Analyzer</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5.0.3/dist/tesseract.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+</head>
+<body>
+  <h1>Residential Utility Bill Analyzer</h1>
+  <input type="file" accept="image/*,application/pdf" onchange="handleFile(event)" />
+
+  <div id="results">
+    <p><strong>Status:</strong> Waiting for upload…</p>
+  </div>
+
+  <canvas id="pdf-canvas"></canvas>
+
+  <script src="script.js"></script>
+</body>
+</html>
