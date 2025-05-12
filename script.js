@@ -58,25 +58,27 @@ function processImage(imageData) {
 }
 
 function extractData(text) {
-  function find(re, fallback = "N/A") {
-    const match = text.match(re);
-    return match ? match[1].trim() : fallback;
+  function findWithFallback(keywords) {
+    for (let kw of keywords) {
+      const regex = new RegExp(kw + '[:\-\s]*\$?([\d,.a-zA-Z ]+)', 'i');
+      const match = text.match(regex);
+      if (match) return match[1].trim();
+    }
+    return "N/A";
   }
 
   return {
-    Utility: find(/Utility(?:\s*Name)?[:\-]?\s*(.+)/i),
-    Tariff: find(/Tariff[:\-]?\s*(.+)/i),
-    Avg_kwh_rate: find(/Average kWh Rate[:\-]?\s*\$?([\d.]+)/i),
-    Avg_fixed_mo_costs: find(/Fixed (Monthly )?Cost[:\-]?\s*\$?([\d.]+)/i, "N/A"),
-    Avg_monthly_bill: find(/Average Monthly Bill[:\-]?\s*\$?([\d.]+)/i),
-    Annual_consumption_kwh: find(/Annual Consumption(?: \(kWh\))?[:\-]?\s*([\d,]+)/i)
+    Utility: findWithFallback(["Utility Name", "Utility"]),
+    Tariff: findWithFallback(["Tariff", "Rate Plan", "Plan"]),
+    Avg_kwh_rate: findWithFallback(["Average kWh Rate", "kWh Rate", "Rate per kWh"]),
+    Avg_fixed_mo_costs: findWithFallback(["Fixed Monthly Cost", "Monthly Fee", "Base Charge", "Fixed Cost"]),
+    Avg_monthly_bill: findWithFallback(["Average Monthly Bill", "Monthly Bill", "Bill Total"]),
+    Annual_consumption_kwh: findWithFallback(["Annual Consumption", "Annual Usage", "Total kWh", "Yearly kWh"])
   };
 }
 
 function displayResult(data) {
-  let html = "<h2>Extracted Info</h2>";
-  for (const [key, value] of Object.entries(data)) {
-    html += `<div class="field"><strong>${key.replaceAll("_", " ")}:</strong> ${value}</div>`;
-  }
-  document.getElementById("results").innerHTML = html;
+  const jsonOutput = JSON.stringify(data, null, 2);
+  document.getElementById("results").innerHTML = "<h2>Data Extracted</h2><pre>" + jsonOutput + "</pre>";
+  document.getElementById("gpt-json").textContent = jsonOutput;
 }
